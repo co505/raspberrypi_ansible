@@ -4,5 +4,8 @@
   become: yes
   vars_files:
     - roles/gradle/defaults/main.yml
+    - roles/mariadb/defaults/main.yml
   tasks:
-    - include_tasks: roles/gradle/tasks/gradle/gradle.yml
+    - include_tasks: roles/gradle/tasks/main.yml
+    - include_tasks: roles/mariadb/tasks/main.yml
+
