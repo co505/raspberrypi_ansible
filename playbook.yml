@@ -1,0 +1,8 @@
+---
+- name: Install and configure Gradle
+  hosts: linux_hosts
+  become: yes
+  vars_files:
+    - defaults/main.yml
+  tasks:
+    - include_tasks: tasks/gradle.yml

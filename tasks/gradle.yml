@@ -1,0 +1,43 @@
+---
+- name: Install default JDK
+  ansible.builtin.package:
+    name: default-jdk
+    state: present
+
+- name: Download Gradle distribution
+  ansible.builtin.get_url:
+    url: "{{ gradle_download_url }}"
+    dest: "{{ gradle_zip_file }}"
+    mode: '0644'
+
+- name: Ensure unzip is installed
+  ansible.builtin.package:
+    name: unzip
+    state: present
+
+- name: Ensure directory for Gradle exists
+  ansible.builtin.file:
+    path: "{{ gradle_install_path }}"
+    state: directory
+
+- name: Unpack Gradle distribution
+  ansible.builtin.unarchive:
+    src: "{{ gradle_zip_file }}"
+    dest: "{{ gradle_install_path }}"
+    creates: "{{ gradle_install_path }}/gradle-8.9"
+    remote_src: yes
+
+- name: Add Gradle to PATH for all users
+  ansible.builtin.shell:
+    cmd: echo "export PATH=\$PATH:{{ gradle_install_env_variable }}" > /etc/profile.d/gradle.sh
+  become: yes
+  args:
+    executable: /bin/bash
+
+- name: Verify Gradle installation
+  ansible.builtin.shell:
+    cmd:  source /etc/profile.d/gradle.sh && gradle -v
+  register: gradle_version
+  changed_when: false
+  args:
+    executable: /bin/bash
