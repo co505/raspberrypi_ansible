@@ -3,6 +3,6 @@
   hosts: linux_hosts
   become: yes
   vars_files:
-    - defaults/main.yml
+    - roles/gradle/defaults/main.yml
   tasks:
-    - include_tasks: tasks/gradle.yml
+    - include_tasks: roles/gradle/tasks/gradle/gradle.yml
