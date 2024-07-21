@@ -1,0 +1,16 @@
+- name: install plugins
+  ansible.builtin.service:
+    name:
+      - zsh
+      - micro
+      - neovim
+    state: present
+
+#- name: configure zsh
+#  ansible.builtin.unarchive:
+#    src: "{{ gradle_zip_file }}"
+#    dest: "{{ gradle_install_path }}"
+#    creates: "{{ gradle_install_path }}/gradle-8.9"
+#    remote_src: yes
+
+

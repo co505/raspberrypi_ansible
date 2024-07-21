@@ -23,13 +23,25 @@
     state: present
     update_cache: yes
 
-- name: Set root user to password
-  mysql_user:
-    login_host: linux_host
-    login_unix_socket: /run/mysqld/mysqld.sock
-    login_user: 'root'
-    login_password: ''
-    name: '{{ mysql_root_username }}'
-    password: '{{ mysql_root_password }}'
+
+- name: create database towns
+  community.mysql.mysql_db:
+    name:
+      - towns
     state: present
+  run_once: true
+
+#- name: Set root user to password
+#  mysql_user:
+#    login_host: linux_host
+#    login_unix_socket: /run/mysqld/mysqld.sock
+#    login_user: 'root'
+#    login_password: ''
+#    name: '{{ mysql_root_username }}'
+#    password: '{{ mysql_root_password }}'
+#    state: present
+#  run_once: true
+
+
+
   become: yes
