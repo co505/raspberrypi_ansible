@@ -1,0 +1,69 @@
+---
+
+- name: install certbot
+  ansible.builtin.package:
+    name: certbot
+    state: latest
+
+- name: start certbot
+  service:
+    name: certbot
+    state: started
+    enabled: yes
+
+# Webroot
+- name: Check if certificate already exists.
+  stat:
+    path: /etc/letsencrypt/live/{{ cert_item.domains | first }}/cert.pem
+  register: letsencrypt_cert
+
+- name: Create webroot directory if it doesn't exist yet
+  file:
+    path: "{{ cert_item.webroot | default(certbot_webroot) }}"
+    state: directory
+
+# Standalone
+
+- name: Ensure pre and post hook folders exist.
+  file:
+    path: /etc/letsencrypt/renewal-hooks/{{ item }}
+    state: directory
+    mode: 0755
+    owner: root
+    group: root
+  with_items:
+    - pre
+    - post
+
+- name: Create pre hook to stop services.
+  template:
+    src: stop_services.j2
+    dest: /etc/letsencrypt/renewal-hooks/pre/stop_services
+    owner: root
+    group: root
+    mode: 0750
+  when:
+    - certbot_create_standalone_stop_services is defined
+    - certbot_create_standalone_stop_services
+
+- name: Create post hook to start services.
+  template:
+    src: start_services.j2
+    dest: /etc/letsencrypt/renewal-hooks/post/start_services
+    owner: root
+    group: root
+    mode: 0750
+
+- name: Generate new certificate if one doesn't exist.
+  command: "{{ certbot_create_command }}"
+  when: not letsencrypt_cert.stat.exists
+
+# Cronjob
+
+- name: Add cron job for certbot renewal (if configured).
+  cron:
+    name: Certbot automatic renewal.
+    job: "{{ certbot_script }} renew {{ certbot_auto_renew_options }}"
+    minute: "{{ certbot_auto_renew_minute }}"
+    hour: "{{ certbot_auto_renew_hour }}"
+    user: "{{ certbot_auto_renew_user }}"

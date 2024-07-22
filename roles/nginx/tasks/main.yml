@@ -10,26 +10,18 @@
     state: started
     enabled: yes
 
-- name: Create Nginx reverse proxy configuration
+- name: creating nginx configuration in /sites-available
   copy:
-    dest: /etc/nginx/conf.d/ubuntu_server.conf
-    content: |
-      server {
-        listen 8081;
-        server_name ubuntuserver;
-        
-  
-        location / {
-            proxy_pass http://192.168.1.37:8080;
-            proxy_set_header Host $host;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-            proxy_set_header X-Forwarded-Proto $scheme;
-        }
-      }
+    source: nginx_mind_ease.conf
+    dest: /etc/nginx/etc/nginx/sites-available/mind-ease.me
+    state: link
 
-- name: restart nginx
-  service:
-    name: nginx
-    state: restarted
+- name: creating nginx configuration in /sites-enabled
+  copy:
+    source: nginx_mind_ease.conf
+    dest: /etc/nginx/etc/nginx/sites-enabled/mind-ease.me
+    state: link
+
+# We put robs code here?
+
 

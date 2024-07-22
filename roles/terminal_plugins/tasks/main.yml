@@ -4,6 +4,8 @@
       - zsh
       - micro
       - neovim
+      - eza
+      - bat
     state: present
 
 #- name: configure zsh
