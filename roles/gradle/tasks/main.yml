@@ -41,3 +41,8 @@
   changed_when: false
   args:
     executable: /bin/bash
+
+- name: Navigate to the project directory and run Gradle bootRun (this will hang but it works)
+  shell: |
+    cd repos/client-project
+    ./gradlew bootRun

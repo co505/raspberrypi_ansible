@@ -26,10 +26,34 @@
 
 - name: create database towns
   community.mysql.mysql_db:
+    login_host: "{{ db_host }}"
+    login_unix_socket: /run/mysqld/mysqld.sock
+    login_user: '{{ mysql_root_username }}'
+    login_password: '{{ mysql_root_password }}'
     name:
-      - towns
+      - "{{ db_name }}"
     state: present
   run_once: true
+
+- name: Import schema.sql
+  community.mysql.mysql_db:
+    login_host: "{{ db_host }}"
+    login_unix_socket: /run/mysqld/mysqld.sock
+    login_user: '{{ mysql_root_username }}'
+    login_password: '{{ mysql_root_password }}'
+    name: "{{ db_name }}"
+    state: import
+    target: '{{ schema_towns_file }}'
+
+- name: Import data.sql
+  community.mysql.mysql_db:
+    login_host: "{{ db_host }}"
+    login_unix_socket: /run/mysqld/mysqld.sock
+    login_user: '{{ mysql_root_username }}'
+    login_password: '{{ mysql_root_password }}'
+    name: "{{ db_name }}"
+    state: import
+    target: '{{ data_towns_file }}'
 
 #- name: Set root user to password
 #  mysql_user:

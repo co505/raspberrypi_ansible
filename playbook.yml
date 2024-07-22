@@ -7,7 +7,8 @@
     - roles/mariadb/defaults/main.yml
     - roles/git/vars/main.yml
   tasks:
-    - include_tasks: roles/gradle/tasks/main.yml
-    - include_tasks: roles/mariadb/tasks/main.yml
     - include_tasks: roles/git/tasks/main.yml
+    - include_tasks: roles/mariadb/tasks/main.yml
+    - include_tasks: roles/gradle/tasks/main.yml
+
 

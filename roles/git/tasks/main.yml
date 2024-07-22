@@ -3,3 +3,5 @@
   git:
     repo: https://git.cardiff.ac.uk/d1656298/client-project
     dest: repos/client-project
+    single_branch: yes
+    version: Extension

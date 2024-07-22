@@ -2,4 +2,8 @@
 
 mysql_root_username: root
 mysql_root_password: comsc
-default_pass: ''
+db_host: linux_host
+db_name: towns
+schema_towns_file: repos/client-project/src/main/resources/schema.sql
+data_towns_file: repos/client-project/src/main/resources/data.sql
+
