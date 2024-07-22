@@ -42,7 +42,9 @@
   args:
     executable: /bin/bash
 
-- name: Navigate to the project directory and run Gradle bootRun (this will hang but it works)
+
+# nohup avoids bootrun from hanging.
+- name: Navigate to the project directory and run Gradle bootRun
   shell: |
     cd repos/client-project
-    ./gradlew bootRun
+    nohup ./gradlew bootRun > bootrun.log 2>&1 &
