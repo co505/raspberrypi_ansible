@@ -1,0 +1,35 @@
+---
+- name: install nginx
+  ansible.builtin.package:
+    name: nginx
+    state: latest
+
+- name: start nginx
+  service:
+    name: nginx
+    state: started
+    enabled: yes
+
+- name: Create Nginx reverse proxy configuration
+  copy:
+    dest: /etc/nginx/conf.d/ubuntu_server.conf
+    content: |
+      server {
+        listen 8081;
+        server_name ubuntuserver;
+        
+  
+        location / {
+            proxy_pass http://192.168.1.37:8080;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+        }
+      }
+
+- name: restart nginx
+  service:
+    name: nginx
+    state: restarted
+
