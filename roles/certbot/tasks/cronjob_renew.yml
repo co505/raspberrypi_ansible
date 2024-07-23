@@ -1,0 +1,12 @@
+---
+# Cronjob to renew cert, related variables located at top of defaults/main.yml
+
+- name: Add cron job for certbot renewal (if configured).
+  cron:
+    name: Certbot automatic renewal.
+    job: "certbot renew {{ certbot_auto_renew_options }}"
+    minute: "{{ certbot_auto_renew_minute }}"
+    hour: "{{ certbot_auto_renew_hour }}"
+    user: "{{ certbot_auto_renew_user }}"
+
+

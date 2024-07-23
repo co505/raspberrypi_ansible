@@ -1,15 +1,15 @@
 ---
-- name: Install and configure Gradle
+- name: Configure RaspPI Server
   hosts: linux_hosts
   become: yes
   vars_files:
     - roles/gradle/defaults/main.yml
     - roles/mariadb/defaults/main.yml
     - roles/git/vars/main.yml
+    - roles/certbot/defaults/main.yml
   tasks:
     - include_tasks: roles/git/tasks/main.yml
     - include_tasks: roles/mariadb/tasks/main.yml
     - include_tasks: roles/gradle/tasks/main.yml
     - include_tasks: roles/nginx/tasks/main.yml
-
-
+    - include_tasks: roles/certbot/tasks/main.yml

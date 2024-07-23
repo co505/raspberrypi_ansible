@@ -1,5 +1,5 @@
 ---
-- name: install nginx
+- name: install.yml nginx
   ansible.builtin.package:
     name: nginx
     state: latest

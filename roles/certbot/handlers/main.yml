@@ -1,0 +1,14 @@
+---
+- name: Start service
+  ansible.builtin.systemd:
+    name: "{{ item }}"
+    state: started
+  loop: "{{ certbot_create_standalone_stop_services }}"
+  listen: Start services
+
+- name: Stop service
+  ansible.builtin.systemd:
+    name: "{{ item }}"
+    state: stopped
+  loop: "{{ certbot_create_standalone_stop_services }}"
+  listen: Stop services

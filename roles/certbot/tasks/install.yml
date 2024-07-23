@@ -1,0 +1,6 @@
+---
+
+- name: install.yml certbot
+  ansible.builtin.package:
+    name: certbot
+    state: latest

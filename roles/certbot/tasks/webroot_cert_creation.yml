@@ -1,0 +1,11 @@
+---
+# Webroot
+- name: Check if certificate already exists.
+  stat:
+    path: /etc/letsencrypt/live/{{ cert_item.domains | first }}/cert.pem
+  register: letsencrypt_cert
+
+- name: Create webroot directory if it doesn't exist yet
+  file:
+    path: "{{ cert_item.webroot | default(certbot_webroot) }}"
+    state: directory

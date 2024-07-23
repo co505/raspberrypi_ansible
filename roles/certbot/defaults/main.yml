@@ -1,10 +1,37 @@
-cert_item.webroot: /var/www/letsencrypt
+# These variables need checking/changing before running: certbot_admin_email, cert_item, ssl_cert_path, web_config_file.
 
+# Defaults set too: webroot mode, nginx, web_config: /etc/nginx/sites-available, cert path: /etc/letsencrypot/live/
 
+# Variables related to auto-renew certificate /w Cronjob.
+certbot_auto_renew: false # Default to false
+certbot_auto_renew_minute: "59"
+certbot_auto_renew_hour: "59"
+certbot_auto_renew_user: "root"
+certbot_auto_renew_options: "--quiet --no-self-upgrade"
+
+# Variables related to initial setup/renewal.
+certbot_create_method: "webroot"
 certbot_webroot: /var/www/letsencrypt
+certbot_create_if_missing: false
+certbot_admin_email: email@cardiff.ac.uk # CHANGE THIS - Admin email.
+certbot_hsts: true
+certbot_testmode: false # Change for test mode.
+certbot_create_standalone_stop_services: ["nginx"] # Add more services, e.g. apache, if required.
+certbot_create_extra_args: ""
 
+# CHANGE THIS - Input admin related information here.
+cert_item:
+  email: "user@cardiff.ac.uk"
+  domains: ["example.com"]
+  webroot: "/var/www/html"
+
+# CHANGE THIS - Pathing variables.
+web_config_file: "/etc/nginx/sites-available/default"
+ssl_cert_path: "/etc/letsencrypt/live/example.com/fullchain.pem"
+
+# Create command with certonly as default to ensure config is not altered.
 certbot_create_command: >-
-  {{ certbot_script }} certonly --{{ certbot_create_method  }}
+  certbot certonly --{{ certbot_create_method  }}
   {{ '--hsts' if certbot_hsts else '' }}
   {{ '--test-cert' if certbot_testmode else '' }}
   --noninteractive --agree-tos

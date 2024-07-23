@@ -1,0 +1,20 @@
+---
+# Standalone
+- name: Check if certificate already exists.
+  stat:
+    path: /etc/letsencrypt/live/{{ cert_item.domains | first | replace('*.', '') }}/cert.pem
+  register: letsencrypt_cert
+
+- name: Notify to stop services before generating certificate (if standalone method).
+  meta: flush_handlers
+  when: certbot_create_method == 'standalone'
+  notify: Stop services
+
+- name: Generate new certificate if one doesn't exist.
+  command: "{{ certbot_create_command }}"
+  when: not letsencrypt_cert.stat.exists
+
+- name: Notify to start services after generating certificate (if standalone method).
+  meta: flush_handlers
+  when: certbot_create_method == 'standalone'
+  notify: Start services
